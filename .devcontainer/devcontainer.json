@@ -1,0 +1,38 @@
+{
+  "name": "ManimGL Dev Container",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+
+  "workspaceFolder": "/code",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/code,type=bind,consistency=cached",
+
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/root/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached"
+  ],
+
+  "postCreateCommand": "pip install -e .",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Python / ManimGL
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.jupyter-renderers",
+        "ms-python.debugpy",
+
+        // Git / Utility
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "ms-ceintl.vscode-language-pack-ja"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "editor.formatOnSave": true
+      }
+    }
+  }
+}
