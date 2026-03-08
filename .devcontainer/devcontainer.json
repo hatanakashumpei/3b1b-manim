@@ -2,36 +2,44 @@
   "name": "ManimGL Dev Container",
   "dockerFile": "Dockerfile",
   "context": "..",
-
   "workspaceFolder": "/code",
   "workspaceMount": "source=${localWorkspaceFolder},target=/code,type=bind,consistency=cached",
-
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/root/.ssh,type=bind,consistency=cached",
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached"
   ],
-
-  "postCreateCommand": "pip install -e .",
-
+  // コンテナ実行時の引数：GPUを認識させ、共有メモリ制限を解除（OpenGL描画に有効）
+  "runArgs": [
+    // "--gpus=all",
+    "--ipc=host",
+    "--net=host"
+  ],
+  // コンテナ内の環境変数設定
+  "containerEnv": {
+    "DISPLAY": ":99",
+    "PYTHONPATH": "/code"
+  },
+  // コンテナ作成後に自動実行（依存関係のインストール）
+  "postCreateCommand": "pip install --upgrade pip && pip install -e .",
   "customizations": {
     "vscode": {
       "extensions": [
-        // Python / ManimGL
         "ms-python.python",
         "ms-python.vscode-pylance",
         "ms-toolsai.jupyter",
         "ms-toolsai.jupyter-keymap",
         "ms-toolsai.jupyter-renderers",
         "ms-python.debugpy",
-
-        // Git / Utility
         "eamodio.gitlens",
         "mhutchie.git-graph",
         "ms-ceintl.vscode-language-pack-ja"
       ],
       "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash",
-        "editor.formatOnSave": true
+        // ターミナルのデフォルトをbashに固定
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true,
+        // Jupyter上でManimのプレビューを出すための設定
+        "jupyter.notebookEditor.interactiveWindow.enableHighlighting": true
       }
     }
   }
